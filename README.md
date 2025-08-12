@@ -1,1 +1,1 @@
-- ouvre le fichier 'Invitation' en premier
+- Ouvre le fichier 'Invitation' en premier.

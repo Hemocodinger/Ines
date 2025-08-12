@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invitation</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      height: 200vh;
+      font-family: 'Courier New', Courier, monospace;
+      background: #ffa6a6;
+      justify-content: center;
+      text-align: center;
+      user-select: none;
+    }
+    
+    h3 {
+      text-align: center;
+      color: beige;
+      align-self: center;
+    }
+
+    .letter {
+      position: fixed;
+      top: 5%;
+      left: 13%;
+      width: 75%;
+      height: 100%;
+      perspective: 1000px;
+      background-image: url('erasebg-transformed%20(1).webp');
+      background-repeat: no-repeat;
+      background-size: 70%;
+      background-position: 50%;
+    }
+
+    #texte {
+      position: fixed;
+      top: 5%;
+      left: 13%;
+      width: 75%;
+      height: 100%;
+      perspective: 1000px;
+      background-image: url('pretexte.png');
+      background-repeat: no-repeat;
+      background-size: 100%;
+      background-position: 50%;
+      opacity: 0;
+      cursor: pointer;
+      transition: font-size 2s ease, width 2s ease, height 2s ease, left 2s ease, top 2s ease;
+      display: inline-block; 
+    }
+
+    #texte.grow {
+      width: 100%;
+      height: 100%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      z-index: 998;
+    }
+
+    #clique {
+      left: 30vw;
+      right: 30vw;
+      opacity: 0;
+      position: fixed;
+      text-align: center;
+      justify-self: center;
+      align-self: center;
+    }
+
+    #invit {
+      left: 10vw;
+      right: 10vw;
+      top: 20vw;
+      bottom: 20vw;
+      font-size: 200%;
+      opacity: 0;
+      position: fixed;
+      text-align: center;
+      justify-self: center;
+      align-self: center;
+      z-index: 999;
+      color: #b61b1b;
+    }
+
+    #scroll {
+      opacity: 1;
+    }
+
+  </style>
+</head>
+<body>
+  <br>
+    <br>  <h3 id="clique">*clique*</h3>
+      <br>
+        <br>
+          <br>
+            <br>
+              <br>
+                <br>
+  <h3 id="scroll">*scroll*</h3>
+  <h3 id="invit">
+    7/09/25
+    <br>
+    <br>
+    11h-17h 
+    <br>
+    <br>
+    48°37'36.3"N 7°30'10.5"E
+  </h3>
+
+  <div id="letter" class="letter"></div>
+  <div id="texte" class="texte"></div>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const letter = document.getElementById('letter');
+  const texte = document.getElementById('texte');
+  const clique = document.getElementById('clique');
+  const scroll = document.getElementById('scroll');
+  const invit = document.getElementById('invit');
+
+  // --- MUSIQUE ---
+  const notes = [
+    264, 264, 297, 264, 352, 330,
+    264, 264, 297, 264, 396, 352,
+    264, 264, 528, 440, 352, 330, 297,
+    466, 466, 440, 352, 396, 352
+  ];
+  let noteIndex = 0;
+
+  function playNote(freq, duration = 400) {
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.frequency.value = freq;
+    osc.type = "sine";
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + duration / 1000);
+  }
+
+  document.addEventListener('click', () => {
+    if (noteIndex < notes.length) {
+      playNote(notes[noteIndex]);
+      noteIndex++;
+    } else {
+      noteIndex = 0;
+    }
+  });
+
+  // --- SCROLL ---
+  window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY;
+    const vh = window.innerHeight;
+
+    if (scrollY > vh * 0.9) {
+      scroll.style.opacity = 0;
+      letter.style.backgroundImage = "url('erasebg-transformed.webp')";
+      setTimeout(() => {
+        texte.style.opacity = 1;
+        clique.style.opacity = 1;
+      }, 2000);
+    }
+  });
+
+  // --- CLICS SUR TEXTE ---
+  const backgrounds = [
+    "url('img1.png')",
+    "url('img2.png')",
+    "url('img3.png')",
+    "url('img4.png')",
+    "url('img5.png')",
+    "url('img6.png')"
+  ];
+  const texts = [
+    'Aller !',
+    'Encore !',
+    'C\'est ça !',
+    'Encore un peu !',
+    'T\'y es presque !',
+    'BRAVO !!!'
+  ];
+
+  let clickCount = 0;
+  let bgIndex = 0;
+  let txtIndex = 0;
+
+  document.addEventListener('click', () => {
+    clickCount++;
+
+    if (clickCount % 5 === 0) {
+      if (bgIndex < backgrounds.length - 1) {
+        bgIndex++;
+        texte.style.backgroundImage = backgrounds[bgIndex];
+      }
+      if (txtIndex < texts.length - 1) {
+        txtIndex++;
+        clique.textContent = texts[txtIndex];
+      }
+      if (clickCount === 25) {
+        texte.classList.add('grow');
+        invit.style.opacity = 1;
+      }
+      
+    }
+  });
+});
+</script>
+
+
+</body>
+</html> 
